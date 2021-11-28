@@ -36,7 +36,7 @@ def start_local(c):
 def install(c):
     """Install blueberry."""
     config_service(c)
-    config_bdd()
+    config_bdd(c)
     c.run("mkdir log")
     c.run("touch log/bookmaker.log")
 
