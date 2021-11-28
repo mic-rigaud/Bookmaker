@@ -1,4 +1,4 @@
-![Gitlab](https://gitlab.com/mic-rigaud/Bookmaker/badges/master/pipeline.svg)
+![Gitlab](https://gitlab.com/mic-rigaud/Bookmaker/badges/main/pipeline.svg)
 
 # Bookmaker
 
