@@ -1,3 +1,5 @@
+![Gitlab](https://gitlab.com/mic-rigaud/Bookmaker/badges/master/pipeline.svg)
+
 # Bookmaker
 
 Bot telegram pour des paris rugbystiques entre amis à héberger chez soi
