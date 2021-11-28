@@ -8,7 +8,6 @@ before_script:
   - poetry install
   - cp ./test/install/config.test ./config.py
   - poetry run invoke install
-  - poetry run invoke prepare-data-test
 
 
 test:
