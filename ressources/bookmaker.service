@@ -1,0 +1,14 @@
+[Unit]
+Description=Bookmaker
+After=network-online.target
+
+[Service]
+Type=simple
+User=bookmaker
+Group=bookmaker
+WorkingDirectory={{dir}}
+ExecStart=poetry run invoke start-local
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,18 @@
+# Il faut completer ce fichier puis le renommer config.py
+
+
+# Tokens du Bot Telegram
+bot_token = "xxxxx"
+
+# Administrateurs
+# Liste des personnes autorisées a administrer le bot.
+# il est attendu les chat_id des administrateurs
+admin_chatid = [111111]
+
+# Mot de passe pour pouvoir acceder à ce bot
+mdp = "hello"
+
+# Log
+# Position du fichier de Log
+log = "/builds/mic-rigaud/Bookmaker/log/bookmaker.log"
+work_dir = "/builds/mic-rigaud/Bookmaker/"

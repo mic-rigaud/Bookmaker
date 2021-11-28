@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "bookmaker"
+version = "0.1.0"
+description = "Bot telegram permettant de faire des paris rugbystiques entre amis"
+authors = ["rgd <michael@mic-rigaud.fr>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+python-telegram-bot = "^13.7"
+invoke = "^1.6.0"
+peewee = "^3.14.8"
+config = "^0.5.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+black = "^21.11b1"
+bandit = "^1.7.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
