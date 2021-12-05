@@ -10,6 +10,7 @@ python-telegram-bot = "^13.7"
 invoke = "^1.6.0"
 peewee = "^3.14.8"
 config = "^0.5.1"
+requests = "^2.26.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
