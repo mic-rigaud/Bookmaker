@@ -7,15 +7,16 @@ from telegram.ext import CallbackContext, CommandHandler, CallbackQueryHandler
 from src.api.Restricted import restricted_admin
 from src.api.Saisons_BDD import Saisons
 from src.api.button import build_menu
-from src.plugins.gestion_saisons.saison_tool import lister_saison, ajouter_saison
+from src.plugins.gestion_saisons.saison_tool import (
+    lister_saison,
+    ajouter_saison,
+    supprimer_saison,
+)
 
 
 def get_liste_saison():
     record = Saisons.select().where(True)
-    reponse = "Voici la liste des saisons suivies par le bot:\n"
-    for saison in record:
-        reponse += "{}\n".format(saison.nom)
-    return reponse
+    return {saison.id: saison.nom for saison in record}
 
 
 def button_add(update: Update, context: CallbackContext):
@@ -30,6 +31,23 @@ def button_add(update: Update, context: CallbackContext):
     # Evite l'erreur du message égal au précédent
     if reponse == query.message.text:
         reponse += "."
+    context.bot.edit_message_text(
+        chat_id=query.message.chat_id,
+        message_id=query.message.message_id,
+        text=reponse,
+        parse_mode=ParseMode.HTML,
+        reply_markup=reply_markup,
+    )
+
+
+def button_supp(update: Update, context: CallbackContext):
+    query = update.callback_query
+    if "gsaison" in query.data:
+        reponse = "Quelle saison souhaitez vous supprimer ?"
+    else:
+        saison_id = query.data.split("_")[2]
+        reponse = supprimer_saison(saison_id)
+    reply_markup = creer_bouton_liste(get_liste_saison(), "supp")
     context.bot.edit_message_text(
         chat_id=query.message.chat_id,
         message_id=query.message.message_id,
@@ -59,6 +77,7 @@ def creer_bouton():
     """Creer la liste de boutons."""
     button_list = [
         InlineKeyboardButton("Ajouter saison", callback_data="gsaison_add"),
+        InlineKeyboardButton("Supprimer saison", callback_data="gsaison_supp"),
     ]
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
 
@@ -66,7 +85,10 @@ def creer_bouton():
 @restricted_admin
 def gestion_saison(update: Update, context: CallbackContext):
     """Renvoi le compte à rebour."""
-    reponse = get_liste_saison()
+    reponse = "Voici la liste des saisons suivies par le bot:\n"
+    liste_saison = get_liste_saison()
+    for key in liste_saison:
+        reponse += "{}\n".format(liste_saison[key])
     reply_markup = creer_bouton()
     context.bot.send_message(
         chat_id=update.message.chat_id,
@@ -82,4 +104,6 @@ def add(dispatcher):
     """
     dispatcher.add_handler(CommandHandler("gestion_saisons", gestion_saison))
     dispatcher.add_handler(CallbackQueryHandler(button_add, pattern="^gsaison_add$"))
+    dispatcher.add_handler(CallbackQueryHandler(button_supp, pattern="^gsaison_supp$"))
     dispatcher.add_handler(CallbackQueryHandler(button_add, pattern="^gs_add_."))
+    dispatcher.add_handler(CallbackQueryHandler(button_supp, pattern="^gs_supp_."))

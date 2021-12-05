@@ -3,6 +3,7 @@ import logging
 from datetime import datetime
 
 import requests
+from peewee import DoesNotExist
 
 import config as cfg
 from src.api.Saisons_BDD import Saisons
@@ -51,3 +52,19 @@ def ajouter_saison(saison_id):
             return "la saison {} a bien été ajouté".format(saison["name"])
     logging.warning("Erreur lors de l'ajout de la saison")
     return "Erreur lors de l'enregistrement de la saison"
+
+
+def supprimer_saison(saison_id):
+    """supprimer_saison:"""
+    try:
+        saison = Saisons.get_by_id(saison_id)
+        logging.info("Suppression de la saison {}".format(saison.nom))
+        nb_delete = saison.delete_instance()
+        if nb_delete != 1:
+            logging.error(
+                "Erreur trop d'élément supprimer dans la BDD : {}".format(nb_delete)
+            )
+        return "Suppression avec succes de la saison {}".format(saison.nom)
+    except DoesNotExist as e:
+        logging.info("La saison demandé n'existe pas")
+        return "Erreur la saison n'existe pas"
