@@ -21,7 +21,11 @@ def bonjour(update: Update, context: CallbackContext):
     """Gere les bonjour."""
     record = Joueur.select().where(Joueur.chat_id == update.message.chat_id)
     if not record.exists():
-        reponse = "Bonjour!\nJe suis un Bookmaker spécialisé dans le rugby! Je vais te permettre de faire quelques petits paris entre copains. Avant de commencer à prendre tes paris, pourrais tu me donner le mot de passe ?"
+        reponse = (
+            "Bonjour!\nJe suis un Bookmaker spécialisé dans le rugby! Je vais te permettre de faire quelques "
+            "petits paris entre copains. Avant de commencer à prendre tes paris, pourrais tu me donner le mot "
+            "de passe ? "
+        )
         context.bot.send_message(
             chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
         )
@@ -55,8 +59,9 @@ def etape2(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
     Joueur.create(nom=nom, chat_id=chat_id).save()
     logging.info("Ajout de l'utilisateur {}".format(nom))
-    reponse = "Bienvenue à toi {}.\nMaintenant à toi de jouer! Les paris sont ouverts!\n Au fait, si tu as besoin d'en savoir plus sur mes fonctionnalités fais /help".format(
-        nom
+    reponse = (
+        "Bienvenue à toi {}.\nMaintenant à toi de jouer! Les paris sont ouverts!\n Au fait, si tu as besoin "
+        "d'en savoir plus sur mes fonctionnalités fais /help".format(nom)
     )
     context.bot.send_message(
         chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML

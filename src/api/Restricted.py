@@ -18,7 +18,10 @@ def restricted(func):
         record = Joueur.select().where(Joueur.chat_id == user_id)
         if not record.exists():
             logging.info("Access non autorisé pour {}.".format(user_id))
-            reponse = "Hey! Mais on se connait pas tout les deux.\nTa maman ne t'as jamais dit qu'on commence toujours une conversation par /bonjour."
+            reponse = (
+                "Hey! Mais on se connait pas tout les deux.\nTa maman ne t'as jamais dit qu'on commence "
+                "toujours une conversation par /bonjour. "
+            )
             context.bot.send_message(
                 chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
             )
@@ -28,7 +31,7 @@ def restricted(func):
     return wrapped
 
 
-def restricted2(func):
+def restricted_admin(func):
     """Rends les commandes en restricted."""
 
     @wraps(func)

@@ -4,7 +4,7 @@ from telegram import ParseMode, Update
 from telegram.ext import CallbackContext, CommandHandler
 
 from src.api.Joueur_BDD import Joueur
-from src.api.Restricted import restricted2
+from src.api.Restricted import restricted_admin
 
 
 def get_liste_user():
@@ -15,7 +15,7 @@ def get_liste_user():
     return reponse
 
 
-@restricted2
+@restricted_admin
 def admin_user(update: Update, context: CallbackContext):
     """Renvoi le compte à rebour."""
     reponse = get_liste_user()
