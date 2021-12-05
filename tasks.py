@@ -11,6 +11,9 @@ from invoke import task
 import config as cfg
 import src.api.api_bdd as bdd
 from src.api.Joueur_BDD import Joueur
+from src.api.Match_BDD import Match
+from src.api.Paris_BDD import Paris
+from src.api.Saisons_BDD import Saisons
 
 
 @task
@@ -57,6 +60,6 @@ def config_bdd(c):
     """Permet l'installation de la BDD automatise."""
     try:
         var = bdd.db.connect
-        bdd.db.create_tables([Joueur])
+        bdd.db.create_tables([Joueur, Match, Paris, Saisons])
     except:
         print("=== La base SQL existe déjà ===")

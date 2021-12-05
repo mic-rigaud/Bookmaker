@@ -4,7 +4,7 @@ from src.api.api_bdd import BaseModel
 
 
 class Joueur(BaseModel):
-    """Objet definissant une IP pour la BDD."""
+    """Objet definissant les Joueurs dans la BDD."""
 
     nom = CharField()
     chat_id = CharField()
