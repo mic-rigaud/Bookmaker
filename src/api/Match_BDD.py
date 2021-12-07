@@ -6,6 +6,7 @@ from src.api.api_bdd import BaseModel
 class Match(BaseModel):
     """Objet definissant un match dans la BDD."""
 
+    match_id = CharField()
     equipe1 = CharField()
     equipe1_code = CharField(default="")
     equipe2 = CharField()

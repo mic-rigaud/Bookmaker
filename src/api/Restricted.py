@@ -15,9 +15,10 @@ def restricted(func):
     @wraps(func)
     def wrapped(update: Update, context: CallbackContext):
         if update.message is None:
-            user_id = update.callback_query.from_user.id
+            message = update.callback_query
         else:
-            user_id = update.message.from_user.id
+            message = update.message
+        user_id = message.from_user.id
         record = Joueur.select().where(Joueur.user_id == user_id)
         if not record.exists():
             logging.info("Access non autorisé pour {}.".format(user_id))
@@ -26,7 +27,7 @@ def restricted(func):
                 "toujours une conversation par /bonjour. "
             )
             context.bot.send_message(
-                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
+                chat_id=message.chat_id, text=reponse, parse_mode=ParseMode.HTML
             )
             return
         return func(update, context)
@@ -40,16 +41,17 @@ def restricted_admin(func):
     @wraps(func)
     def wrapped(update: Update, context: CallbackContext):
         if update.message is None:
-            user_id = update.callback_query.from_user.id
+            message = update.callback_query
         else:
-            user_id = update.message.from_user.id
+            message = update.message
+        user_id = message.from_user.id
         if user_id not in cfg.admin_chatid:
             logging.info(
                 "Access non autorisé pour {} sur une fonction d'admin.".format(user_id)
             )
             reponse = "C'est une fonction d'admin. C'est pas pour toi, désolé."
             context.bot.send_message(
-                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
+                chat_id=message.chat_id, text=reponse, parse_mode=ParseMode.HTML
             )
             return
         return func(update, context)

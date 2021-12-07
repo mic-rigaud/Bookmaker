@@ -47,7 +47,8 @@ def help(update: Update, context: CallbackContext):
         if doc and (
                 (
                         update.message.from_user.id not in cfg.admin_chatid
-                        and nom not in ["bonjour", "admin_user", "gestion_saisons", "gestion_match"]
+                        and nom
+                        not in ["bonjour", "admin_user", "gestion_saisons", "gestion_match"]
                 )
                 or update.message.from_user.id in cfg.admin_chatid
         ):
