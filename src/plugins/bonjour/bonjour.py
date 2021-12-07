@@ -1,4 +1,4 @@
-"""Ajoute les utilisateurs"""
+"""Permet d'ajouter l'utilisateur qui utilise la commande"""
 
 import logging
 
@@ -19,7 +19,7 @@ ETAPE1, ETAPE2 = range(2)
 
 def bonjour(update: Update, context: CallbackContext):
     """Gere les bonjour."""
-    record = Joueur.select().where(Joueur.chat_id == update.message.chat_id)
+    record = Joueur.select().where(Joueur.user_id == update.message.from_user.id)
     if not record.exists():
         reponse = (
             "Bonjour!\nJe suis un Bookmaker spécialisé dans le rugby! Je vais te permettre de faire quelques "
@@ -57,7 +57,8 @@ def etape1(update: Update, context: CallbackContext):
 def etape2(update: Update, context: CallbackContext):
     nom = update.message.text
     chat_id = update.message.chat_id
-    Joueur.create(nom=nom, chat_id=chat_id).save()
+    user_id = update.message.from_user.id
+    Joueur.create(nom=nom, chat_id=chat_id, user_id=user_id).save()
     logging.info("Ajout de l'utilisateur {}".format(nom))
     reponse = (
         "Bienvenue à toi {}.\nMaintenant à toi de jouer! Les paris sont ouverts!\n Au fait, si tu as besoin "

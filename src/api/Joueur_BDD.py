@@ -8,4 +8,5 @@ class Joueur(BaseModel):
 
     nom = CharField()
     chat_id = CharField()
+    user_id = CharField()
     total_point = IntegerField(default=0)

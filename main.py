@@ -46,10 +46,10 @@ def help(update: Update, context: CallbackContext):
         nom = mod.__name__.replace("src.plugins.", "").split(".")[0]
         if doc and (
                 (
-                        update.message.chat_id not in cfg.admin_chatid
-                        and nom not in ["bonjour", "admin_user", "gestion_saisons"]
+                        update.message.from_user.id not in cfg.admin_chatid
+                        and nom not in ["bonjour", "admin_user", "gestion_saisons", "gestion_match"]
                 )
-                or update.message.chat_id in cfg.admin_chatid
+                or update.message.from_user.id in cfg.admin_chatid
         ):
             if demande == "":
                 reponse += "/" + nom + " : " + doc + "\n"

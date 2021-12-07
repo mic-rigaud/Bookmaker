@@ -1,4 +1,5 @@
-"""Renvoi la liste des utilisateurs actuels."""
+"""Permet de gerer les saisons de rugby suivies."""
+
 import logging
 
 from telegram import ParseMode, Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -19,6 +20,7 @@ def get_liste_saison():
     return {saison.id: saison.nom for saison in record}
 
 
+@restricted_admin
 def button_add(update: Update, context: CallbackContext):
     query = update.callback_query
     if "gsaison" in query.data:
@@ -40,6 +42,7 @@ def button_add(update: Update, context: CallbackContext):
     )
 
 
+@restricted_admin
 def button_supp(update: Update, context: CallbackContext):
     query = update.callback_query
     if "gsaison" in query.data:
