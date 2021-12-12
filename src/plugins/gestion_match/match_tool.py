@@ -45,3 +45,11 @@ def add_match():
         for match in matchs:
             add_match_bdd(match)
     return "Matchs ajouté avec succès"
+
+
+def liste_match():
+    """liste_match:"""
+    reponse = "Voici les matchs disponibles:\n"
+    for match in Match.select():
+        reponse += "{} - {}\n".format(match.equipe1, match.equipe2)
+    return reponse
