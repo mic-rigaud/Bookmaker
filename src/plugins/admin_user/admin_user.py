@@ -17,7 +17,7 @@ def get_liste_user():
 
 @restricted_admin
 def admin_user(update: Update, context: CallbackContext):
-    """Renvoi le compte à rebour."""
+    """Renvoi la liste des joueurs."""
     reponse = get_liste_user()
     context.bot.send_message(
         chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
@@ -26,6 +26,6 @@ def admin_user(update: Update, context: CallbackContext):
 
 def add(dispatcher):
     """
-    Renvoi le compte à rebour.
+    Renvoi la liste des joueurs.
     """
     dispatcher.add_handler(CommandHandler("admin_user", admin_user))

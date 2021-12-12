@@ -19,7 +19,10 @@ ETAPE1, ETAPE2 = range(2)
 
 def bonjour(update: Update, context: CallbackContext):
     """Gere les bonjour."""
-    record = Joueur.select().where(Joueur.user_id == update.message.from_user.id)
+    record = Joueur.select().where(
+        Joueur.user_id == update.message.from_user.id
+        and Joueur.chat_id == update.message.chat_id
+    )
     if not record.exists():
         reponse = (
             "Bonjour!\nJe suis un Bookmaker spécialisé dans le rugby! Je vais te permettre de faire quelques "
