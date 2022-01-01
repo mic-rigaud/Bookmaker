@@ -27,6 +27,11 @@ logging.basicConfig(
 HELP_LIST = []
 
 
+def error(update: Update, context: CallbackContext):
+    """Log Errors caused by Updates."""
+    logging.warning('Update "%s" caused error "%s"', update, context.error)
+
+
 @restricted
 def unknown(update: Update, context: CallbackContext):
     """Gere la reponse pour une commande inconnue."""
@@ -45,12 +50,12 @@ def help(update: Update, context: CallbackContext):
         doc = mod.__doc__
         nom = mod.__name__.replace("src.plugins.", "").split(".")[0]
         if doc and (
-                (
-                        update.message.from_user.id not in cfg.admin_chatid
-                        and nom
-                        not in ["bonjour", "admin_user", "gestion_saisons", "gestion_match"]
-                )
-                or update.message.from_user.id in cfg.admin_chatid
+            (
+                update.message.from_user.id not in cfg.admin_chatid
+                and nom
+                not in ["bonjour", "admin_user", "gestion_saisons", "gestion_match"]
+            )
+            or update.message.from_user.id in cfg.admin_chatid
         ):
             if demande == "":
                 reponse += "/" + nom + " : " + doc + "\n"
@@ -86,6 +91,7 @@ if __name__ == "__main__":
     updater = Updater(token=cfg.bot_token, use_context=True)
     dispatcher = updater.dispatcher
     charge_plugins(dispatcher)
+    dispatcher.add_error_handler(error)
     updater.start_polling()
     updater.idle()
 
