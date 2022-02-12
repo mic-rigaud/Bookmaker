@@ -49,6 +49,7 @@ def etape1(update: Update, context: CallbackContext):
     query = update.callback_query
     match_id = query.data.split("_")[2]
     paris.match = Match.get_by_id(match_id)
+    paris.date_match = paris.match.get_date_match()
     # Traitement question
     reponse = "Quel équipe sera vainqueur ?"
     button_list = [

@@ -17,8 +17,8 @@ from src.api.Restricted import restricted
 def get_classement_user(chat_id):
     record = (
         Joueur.select()
-            .where(Joueur.chat_id == chat_id)
-            .order_by(Joueur.total_point.desc())
+        .where(Joueur.chat_id == chat_id)
+        .order_by(Joueur.total_point.desc())
     )
     reponse = "Voici la liste des joueurs:\n"
     for i, person in enumerate(record, start=1):

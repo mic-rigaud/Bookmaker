@@ -58,7 +58,7 @@ def help(update: Update, context: CallbackContext):
             or update.message.from_user.id in cfg.admin_chatid
         ):
             if demande == "":
-                reponse += "/" + nom + " : " + doc + "\n"
+                reponse += f"/{nom} : {doc}" + "\n"
             elif demande in nom:
                 reponse = mod.add.__doc__
 
@@ -72,9 +72,7 @@ def charge_plugins(main_dispatcher):
     lst_import = os.listdir("./src/plugins")
     for module_name in lst_import:
         if "__" not in module_name:
-            mod = __import__(
-                "src.plugins." + module_name + "." + module_name, fromlist=[""]
-            )
+            mod = __import__(f"src.plugins.{module_name}.{module_name}", fromlist=[""])
             mod.add(main_dispatcher)
             HELP_LIST.append(mod)
     help_handler = CommandHandler("help", help, pass_args=True)
@@ -91,7 +89,7 @@ if __name__ == "__main__":
     updater = Updater(token=cfg.bot_token, use_context=True)
     dispatcher = updater.dispatcher
     charge_plugins(dispatcher)
-    dispatcher.add_error_handler(error)
+    # dispatcher.add_error_handler(error)
     updater.start_polling()
     updater.idle()
 

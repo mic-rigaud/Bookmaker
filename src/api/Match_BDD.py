@@ -14,7 +14,7 @@ class Match(BaseModel):
     equipe1_code = CharField(default="")
     equipe2 = CharField()
     equipe2_code = CharField(default="")
-    date_match = DateTimeField()
+    date_match = DateTimeField(formats="%Y-%m-%d %H:%M:%S")
     vainqueur = IntegerField(default=0)
     resultat_equipe1 = IntegerField(default=0)
     resultat_equipe2 = IntegerField(default=0)
@@ -23,6 +23,9 @@ class Match(BaseModel):
 
     def __str__(self):
         return "{} - {}".format(self.equipe1, self.equipe2)
+
+    def get_date_match(self):
+        return datetime.strptime(self.date_match, "%Y-%m-%d %H:%M:%S%z")
 
 
 def liste_next_match():

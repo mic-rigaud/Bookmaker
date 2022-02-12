@@ -5,7 +5,7 @@ from telegram.ext import CallbackContext, CommandHandler, CallbackQueryHandler
 
 from src.api.Restricted import restricted_admin
 from src.api.button import build_menu
-from src.plugins.gestion_match.match_tool import add_match, liste_match
+from src.plugins.gestion_match.match_tool import add_match, liste_match, refresh_match
 
 
 @restricted_admin
@@ -46,7 +46,7 @@ def button_liste(update: Update, context: CallbackContext):
 def button_refresh(update: Update, context: CallbackContext):
     query = update.callback_query
     reply_markup = creer_bouton()
-    reponse = "hello"  # refresh_match()
+    reponse = refresh_match()
     # Evite l'erreur du message égal au précédent
     if reponse == query.message.text:
         reponse += "."
@@ -63,7 +63,7 @@ def creer_bouton():
     """Creer la liste de boutons."""
     button_list = [
         InlineKeyboardButton("Ajouter matchs", callback_data="gmatch_add"),
-        InlineKeyboardButton("Actualiser résultats", callback_data="gmatch_supp"),
+        InlineKeyboardButton("Actualiser résultats", callback_data="gmatch_refresh"),
         InlineKeyboardButton("Lister les matchs", callback_data="gmatch_liste"),
     ]
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=1))

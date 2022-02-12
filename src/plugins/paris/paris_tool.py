@@ -11,6 +11,7 @@ from src.api.Paris_BDD import Paris
 
 def liste_paris(joueur):
     reponse = "Voici la liste de vos paris:\n"
-    for pari in Paris.select().where(Paris.joueur == joueur):
+    paris = Paris.select().where(Paris.joueur == joueur).order_by(Paris.date_match)
+    for pari in paris:
         reponse += "\n" + pari.afficher_paris()
     return reponse
