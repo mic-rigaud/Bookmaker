@@ -1,7 +1,7 @@
 """Permet de gerer les matchs pour un admin"""
 
-from telegram import ParseMode, Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, CommandHandler, CallbackQueryHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from src.api.Restricted import restricted_admin
 from src.api.button import build_menu
@@ -17,12 +17,12 @@ def button_add(update: Update, context: CallbackContext):
     if reponse == query.message.text:
         reponse += "."
     context.bot.edit_message_text(
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        text=reponse,
-        parse_mode=ParseMode.HTML,
-        reply_markup=reply_markup,
-    )
+            chat_id=query.message.chat_id,
+            message_id=query.message.message_id,
+            text=reponse,
+            parse_mode=ParseMode.HTML,
+            reply_markup=reply_markup,
+            )
 
 
 @restricted_admin
@@ -34,12 +34,12 @@ def button_liste(update: Update, context: CallbackContext):
     if reponse == query.message.text:
         reponse += "."
     context.bot.edit_message_text(
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        text=reponse,
-        parse_mode=ParseMode.HTML,
-        reply_markup=reply_markup,
-    )
+            chat_id=query.message.chat_id,
+            message_id=query.message.message_id,
+            text=reponse,
+            parse_mode=ParseMode.HTML,
+            reply_markup=reply_markup,
+            )
 
 
 @restricted_admin
@@ -51,12 +51,12 @@ def button_refresh(update: Update, context: CallbackContext):
     if reponse == query.message.text:
         reponse += "."
     context.bot.edit_message_text(
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        text=reponse,
-        parse_mode=ParseMode.HTML,
-        reply_markup=reply_markup,
-    )
+            chat_id=query.message.chat_id,
+            message_id=query.message.message_id,
+            text=reponse,
+            parse_mode=ParseMode.HTML,
+            reply_markup=reply_markup,
+            )
 
 
 def creer_bouton():
@@ -65,21 +65,21 @@ def creer_bouton():
         InlineKeyboardButton("Ajouter matchs", callback_data="gmatch_add"),
         InlineKeyboardButton("Actualiser résultats", callback_data="gmatch_refresh"),
         InlineKeyboardButton("Lister les matchs", callback_data="gmatch_liste"),
-    ]
+        ]
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
 
 
 @restricted_admin
 def gestion_match(update: Update, context: CallbackContext):
-    """Renvoi le compte à rebour."""
+    """Permet de gerer les matchs."""
     reponse = "Voici les actions sur la gestion des matchs:\n"
     reply_markup = creer_bouton()
     context.bot.send_message(
-        chat_id=update.message.chat_id,
-        text=reponse,
-        parse_mode=ParseMode.HTML,
-        reply_markup=reply_markup,
-    )
+            chat_id=update.message.chat_id,
+            text=reponse,
+            parse_mode=ParseMode.HTML,
+            reply_markup=reply_markup,
+            )
 
 
 def add(dispatcher):
@@ -90,5 +90,5 @@ def add(dispatcher):
     dispatcher.add_handler(CallbackQueryHandler(button_add, pattern="^gmatch_add"))
     dispatcher.add_handler(CallbackQueryHandler(button_liste, pattern="^gmatch_liste"))
     dispatcher.add_handler(
-        CallbackQueryHandler(button_refresh, pattern="^gmatch_refresh")
-    )
+            CallbackQueryHandler(button_refresh, pattern="^gmatch_refresh")
+            )
