@@ -78,8 +78,11 @@ def add_match():
     """
     for saison in Saisons.select():
         matchs = get_matchs(saison.season_id)
-        for match in matchs:
-            add_match_bdd(match)
+        if matchs is not None:
+            for match in matchs:
+                add_match_bdd(match)
+        else:
+            logging.warning(f"Aucun match trouvé pour {saison.nom}")
     return "Matchs ajouté avec succès"
 
 
@@ -89,9 +92,15 @@ def liste_match():
     :rtype: str
     """
     reponse = "Voici les matchs disponibles:\n"
-    for match in Match.select():
+    for match in Match.select().where(Match.date_match > datetime.now()):
         reponse += f"{match.equipe1} - {match.equipe2}\n"
     return reponse
+
+
+def delete_matchs():
+    for match in Match.select():
+        match.delete_instance()
+    return "Les matchs ont bien été supprimés"
 
 
 def refresh_match():
@@ -111,26 +120,18 @@ def actualiser_match(match):
     :param Match match: match a actualiser
     :rtype: None
     """
+    logging.info(f"Actualisation du macth {match.equipe1} - {match.equipe2}")
     summary_match = get_info_matchs(match.match_id)
     if not summary_match:
         return
     if summary_match["sport_event_status"]["status"] == "closed":
         match.resultat_equipe1 = summary_match["sport_event_status"]["home_score"]
         match.resultat_equipe2 = summary_match["sport_event_status"]["away_score"]
-        if (
-                summary_match["statistics"]["totals"]["competitors"][0]["statistics"][
-                    "tries"
-                ]
-                > 3
-        ):
-            match.bonus_offensif = True
-        if (
-                summary_match["statistics"]["totals"]["competitors"][1]["statistics"][
-                    "tries"
-                ]
-                > 3
-        ):
-            match.bonus_offensif = True
+        if "statistic" in summary_match:
+            if summary_match["statistics"]["totals"]["competitors"][0]["statistics"]["tries"] > 3:
+                match.bonus_offensif = True
+            if summary_match["statistics"]["totals"]["competitors"][1]["statistics"]["tries"] > 3:
+                match.bonus_offensif = True
         if abs(match.resultat_equipe1 - match.resultat_equipe2) < 8:
             match.bonus_defensif = True
         match.save()
