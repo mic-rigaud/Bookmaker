@@ -1,6 +1,7 @@
 from _datetime import datetime
 import json
 import logging
+import time
 
 import pytz
 import requests
@@ -109,7 +110,8 @@ def refresh_match():
     :rtype: str
     """
     for match in Match.select():
-        if match.get_date_match() <= datetime.now().replace(tzinfo=pytz.UTC):
+        if match.vainqueur == 0 and match.get_date_match() <= datetime.now().replace(tzinfo=pytz.UTC):
+            time.sleep(5)
             actualiser_match(match)
     return "Resultat bien mis à jour"
 
@@ -120,7 +122,7 @@ def actualiser_match(match):
     :param Match match: match a actualiser
     :rtype: None
     """
-    logging.info(f"Actualisation du macth {match.equipe1} - {match.equipe2}")
+    logging.info(f"Actualisation du match {match.equipe1} - {match.equipe2}")
     summary_match = get_info_matchs(match.match_id)
     if not summary_match:
         return
@@ -134,6 +136,12 @@ def actualiser_match(match):
                 match.bonus_offensif = True
         if abs(match.resultat_equipe1 - match.resultat_equipe2) < 8:
             match.bonus_defensif = True
+        if match.resultat_equipe1 > match.resultat_equipe2:
+            match.vainqueur = 1
+        elif match.resultat_equipe2 > match.resultat_equipe1:
+            match.vainqueur = 2
+        else:
+            match.vainqueur = 3
         match.save()
         actualiser_paris(match)
 
@@ -146,11 +154,7 @@ def actualiser_paris(match):
     """
     for paris in Paris.select():
         if paris.match == match:
-            if (
-                    paris.vainqueur == 1 and match.resultat_equipe1 > match.resultat_equipe2
-            ) or (
-                    paris.vainqueur == 2 and match.resultat_equipe2 > match.resultat_equipe1
-            ):
+            if paris.vainqueur == match.vainqueur:
                 joueur = paris.joueur
                 joueur.total_point += cfg.pts_paris_gagnant
                 joueur.save()
@@ -162,4 +166,3 @@ def actualiser_paris(match):
                 joueur = paris.joueur
                 joueur.total_point += cfg.pts_bonus_defensif
                 joueur.save()
-            paris.delete_instance()

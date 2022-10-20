@@ -1,4 +1,4 @@
-from peewee import ForeignKeyField, IntegerField, BooleanField, DateTimeField
+from peewee import BooleanField, DateTimeField, ForeignKeyField, IntegerField
 
 from src.api.Joueur_BDD import Joueur
 from src.api.Match_BDD import Match
@@ -17,11 +17,15 @@ class Paris(BaseModel):
 
     def afficher_paris(self):
         """afficher_paris:"""
-        reponse = "<b>{} - {}</b>\n".format(self.match.equipe1, self.match.equipe2)
+        reponse = f"<b>{self.match.equipe1} - {self.match.equipe2}</b>\n"
         match_board = {1: self.match.equipe1, 2: self.match.equipe2}
-        reponse += "  Vainqueur: {}".format(match_board[int(self.vainqueur)])
+        # noinspection PyTypeChecker
+        reponse += f"  Vainqueur: {match_board[int(self.vainqueur)]}"
         if self.bonus_offensif:
             reponse += "\n  Avec bonus Offensif"
         if self.bonus_defensif:
             reponse += "\n  Avec bonus Defensif"
+
+        if self.match.vainqueur != 0:
+            reponse += f"\n<b>Match terminé. Vaiqueur: {match_board[int(self.match.vaiqueur)]}{' Bo' if self.match.bonus_offensif else ''}{' Bd' if self.match.bonus_defensif else ''}<b>"
         return reponse

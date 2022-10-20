@@ -23,9 +23,5 @@ def get_joueur(chatid, userid):
             .get()
         )
     except Joueur.DoesNotExist:
-        logging.warning(
-            "Le joueur demandé n'existe pas. Le chatid est {} et le userid est {}".format(
-                chatid, userid
-            )
-        )
+        logging.warning(f"Le joueur demandé n'existe pas. Le chatid est {chatid} et le userid est {userid}")
         return None
