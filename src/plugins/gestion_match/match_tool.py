@@ -155,14 +155,12 @@ def actualiser_paris(match):
     for paris in Paris.select():
         if paris.match == match:
             if paris.vainqueur == match.vainqueur:
-                joueur = paris.joueur
-                joueur.total_point += cfg.pts_paris_gagnant
-                joueur.save()
+                paris.points_gagnes += cfg.pts_paris_gagnant
             if paris.bonus_offensif and match.bonus_offensif:
-                joueur = paris.joueur
-                joueur.total_point += cfg.pts_bonus_offensif
-                joueur.save()
+                paris.points_gagnes += cfg.pts_bonus_offensif
             if paris.bonus_defensif and match.bonus_defensif:
-                joueur = paris.joueur
-                joueur.total_point += cfg.pts_bonus_defensif
-                joueur.save()
+                paris.points_gagnes += cfg.pts_bonus_defensif
+            joueur = paris.joueur
+            joueur.total_point += paris.points_gagnes
+            joueur.save()
+            paris.save()

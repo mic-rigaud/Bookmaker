@@ -14,6 +14,7 @@ class Paris(BaseModel):
     bonus_offensif = BooleanField(default=False)
     bonus_defensif = BooleanField(default=False)
     date_match = DateTimeField(formats="%Y-%m-%d %H:%M:%S")
+    points_gagnes = IntegerField(default=0)
 
     def afficher_paris(self):
         """afficher_paris:"""
@@ -27,5 +28,8 @@ class Paris(BaseModel):
             reponse += "\n  Avec bonus Defensif"
 
         if self.match.vainqueur != 0:
-            reponse += f"\n<b>Match terminé. Vaiqueur: {match_board[int(self.match.vaiqueur)]}{' Bo' if self.match.bonus_offensif else ''}{' Bd' if self.match.bonus_defensif else ''}<b>"
+            reponse += f"\n<b>TERMINE. V: {match_board[int(self.match.vainqueur)]}"
+            reponse += f"{' -Bo' if self.match.bonus_offensif else ''}"
+            reponse += f"{' -Bd' if self.match.bonus_defensif else ''}"
+            reponse += f" (+{self.points_gagnes} pts)</b>\n"
         return reponse
