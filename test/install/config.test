@@ -16,3 +16,20 @@ mdp = "hello"
 # Position du fichier de Log
 log = "/builds/mic-rigaud/Bookmaker/log/bookmaker.log"
 work_dir = "/builds/mic-rigaud/Bookmaker/"
+# Pour une utilisation avec Docker, utiliser ces variables:
+# log = "/app/log/bookmaker.log"
+# work_dir = "/app/"
+
+
+# API_KEY
+# L'api de sportradar est utilisé. Une clef gratuite est suffisante pour avoir une
+# actualisation par jour. Attention, il faut une clef pour l'api rugby union
+rygby_api_key = "xxxxxxxxxxxx"
+
+# Configuration du nombre de point gagné par les joueurs
+pts_paris_gagnant = 3
+pts_bonus_offensif = 1
+pts_bonus_defensif = 1
+
+## Variable a passer a True en phase de test pour diminuer le nombre d'appel API
+test = True

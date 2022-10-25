@@ -14,13 +14,20 @@ def restricted(func):
 
     @wraps(func)
     def wrapped(update: Update, context: CallbackContext):
-        user_id = update.message.chat_id
-        record = Joueur.select().where(Joueur.chat_id == user_id)
+        if update.message is None:
+            message = update.callback_query
+        else:
+            message = update.message
+        user_id = message.from_user.id
+        record = Joueur.select().where(Joueur.user_id == user_id)
         if not record.exists():
             logging.info("Access non autorisé pour {}.".format(user_id))
-            reponse = "Hey! Mais on se connait pas tout les deux.\nTa maman ne t'as jamais dit qu'on commence toujours une conversation par /bonjour."
+            reponse = (
+                "Hey! Mais on se connait pas tout les deux.\nTa maman ne t'as jamais dit qu'on commence "
+                "toujours une conversation par /bonjour. "
+            )
             context.bot.send_message(
-                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
+                chat_id=message.chat_id, text=reponse, parse_mode=ParseMode.HTML
             )
             return
         return func(update, context)
@@ -28,19 +35,23 @@ def restricted(func):
     return wrapped
 
 
-def restricted2(func):
+def restricted_admin(func):
     """Rends les commandes en restricted."""
 
     @wraps(func)
     def wrapped(update: Update, context: CallbackContext):
-        user_id = update.message.chat_id
+        if update.message is None:
+            message = update.callback_query
+        else:
+            message = update.message
+        user_id = message.from_user.id
         if user_id not in cfg.admin_chatid:
             logging.info(
                 "Access non autorisé pour {} sur une fonction d'admin.".format(user_id)
             )
             reponse = "C'est une fonction d'admin. C'est pas pour toi, désolé."
             context.bot.send_message(
-                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
+                chat_id=message.chat_id, text=reponse, parse_mode=ParseMode.HTML
             )
             return
         return func(update, context)
