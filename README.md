@@ -2,11 +2,23 @@
 
 # Bookmaker
 
+Version: 0.1.0
+
 Bot telegram pour des paris rugbystiques entre amis à héberger chez soi
 
-ATTENTION : Ce Bot n'est pas terminé. Et il n'est pas encore opérationnel.
+*ATTENTION : Ce Bot fonctionne mais c'est une version Beta*
 
-## Docker
+## Prérequis
+
+Attention, pour utiliser ce bot il faut au préalable :
+
+- Avoir un créé un bot télégram avec le [Bot Father](https://botostore.com/c/botfather/)
+- Avoir une clef pour utiliser l'[API](https://api.sportradar.us/rugby-union/) Rugby Union de Sportradar. Avec l'API
+  gratuite le nombre de requete est limité. C'est suffisant pour un usage personnel uniquement.
+
+## Installation
+
+### Docker
 
 Préparer l'installation:
 
@@ -28,7 +40,7 @@ Puis pour lancer le container:
 docker run -d -v bookmaker-log:/app/log -v bookmaker-data:/app/ressources bookmaker
 ```
 
-## Standalone
+### Standalone
 
 Pour preparer l'installation
 
