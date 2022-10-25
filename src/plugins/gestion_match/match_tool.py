@@ -1,4 +1,4 @@
-from _datetime import datetime
+from _datetime import datetime, timedelta
 import json
 import logging
 import time
@@ -50,7 +50,7 @@ def get_info_matchs(match_id):
         return None
 
 
-def add_match_bdd(match):
+def add_match_bdd(match, saison):
     """Ajoute le match dans la base de donnee si il n'y est pas
 
     :param dict match: match a ajouter dans la bdd
@@ -68,6 +68,7 @@ def add_match_bdd(match):
                 equipe2=match["sport_event"]["competitors"][1]["name"],
                 equipe2_code=match["sport_event"]["competitors"][1]["id"].split(":")[2],
                 date_match=date_match,
+                saison=saison
                 )
         match.save()
 
@@ -81,7 +82,7 @@ def add_match():
         matchs = get_matchs(saison.season_id)
         if matchs is not None:
             for match in matchs:
-                add_match_bdd(match)
+                add_match_bdd(match, saison)
         else:
             logging.warning(f"Aucun match trouvé pour {saison.nom}")
     return "Matchs ajouté avec succès"
@@ -110,10 +111,11 @@ def refresh_match():
     :rtype: str
     """
     for match in Match.select():
-        if match.vainqueur == 0 and match.get_date_match() <= datetime.now().replace(tzinfo=pytz.UTC):
+        if match.vainqueur == 0 and match.get_date_match() <= datetime.now().replace(tzinfo=pytz.UTC) and \
+                (not cfg.test or match.get_date_match() <= datetime.now().replace(tzinfo=pytz.UTC) - timedelta(days=7)):
             time.sleep(5)
             actualiser_match(match)
-    return "Resultat bien mis à jour"
+    return "Resultats bien mis à jour"
 
 
 def actualiser_match(match):

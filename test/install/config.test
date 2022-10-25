@@ -30,3 +30,6 @@ rygby_api_key = "xxxxxxxxxxxx"
 pts_paris_gagnant = 3
 pts_bonus_offensif = 1
 pts_bonus_defensif = 1
+
+## Variable a passer a True en phase de test pour diminuer le nombre d'appel API
+test = True
