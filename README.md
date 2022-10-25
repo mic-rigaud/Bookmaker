@@ -29,9 +29,9 @@ cp ./test/install/config.test ./config.py
 Ensuite il faut modifier le fichier config.py
 
 ```bash
-docker build -t bookmaker
 docker volume create bookmaker-log
 docker volume create bookmaker-data
+docker build -t bookmaker .
 ``` 
 
 Puis pour lancer le container:
