@@ -32,6 +32,8 @@ def test_code(c):
 @task
 def start_local(c):
     """Lance test unitaire."""
+    if not c.run("ls log/bookmaker.log", hide=True, warn=True):
+        c.run("touch log/bookmaker.log")
     c.run("python3 main.py", pty=True, warn=True)
 
 
