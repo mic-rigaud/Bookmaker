@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from peewee import BooleanField, CharField, DateTimeField, ForeignKeyField, IntegerField
-from telegram import InlineKeyboardButton
 
 from src.api.Saisons_BDD import Saisons
 from src.api.api_bdd import BaseModel
@@ -29,16 +28,3 @@ class Match(BaseModel):
     def get_date_match(self):
         # noinspection PyTypeChecker
         return datetime.strptime(self.date_match, "%Y-%m-%d %H:%M:%S%z")
-
-
-def liste_next_match():
-    """liste_match: renvoi un dictionnaire des prochain match"""
-    return {
-        match.get_id(): str(match)
-        for match in Match.select().where(Match.date_match > datetime.now())
-        }
-
-
-def creer_button_liste_next_match(patern):
-    """creer_button_liste_next_match:"""
-    return [InlineKeyboardButton(valeur, callback_data=f"{patern}_{key}") for key, valeur in liste_next_match().items()]

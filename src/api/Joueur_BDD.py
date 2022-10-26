@@ -19,7 +19,7 @@ def get_joueur(chatid, userid):
     try:
         return (
             Joueur.select()
-            .where(Joueur.chat_id == chatid and Joueur.user_id == userid)
+            .where((Joueur.chat_id == chatid) & (Joueur.user_id == userid))
             .get()
         )
     except Joueur.DoesNotExist:
