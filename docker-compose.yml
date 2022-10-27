@@ -13,8 +13,6 @@ services:
     volumes:
       - bookmaker-data:/app/ressources
       - bookmaker-log:/app/log
-    env_file:
-      - .env
 
 
 volumes:
