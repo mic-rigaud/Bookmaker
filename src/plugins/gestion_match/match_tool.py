@@ -23,7 +23,7 @@ def get_matchs(saison_id):
     :rtype: list or None
     :returns: json object contenant les matchs
     """
-    url = f"https://api.sportradar.us/rugby-union/trial/v3/fr/seasons/sr:season:{saison_id}/lineups.json?api_key={cfg.rygby_api_key}"
+    url = f"https://api.sportradar.us/rugby-union/trial/v3/fr/seasons/sr:season:{saison_id}/lineups.json?api_key={cfg.rugby_api_key}"
 
     req = requests.get(url)
     try:
@@ -40,7 +40,7 @@ def get_info_matchs(match_id):
     :rtype: dict or None
     :returns: json object contenant les matchs
     """
-    url = f"https://api.sportradar.us/rugby-union/trial/v3/fr/sport_events/sr:match:{match_id}/summary.json?api_key={cfg.rygby_api_key}"
+    url = f"https://api.sportradar.us/rugby-union/trial/v3/fr/sport_events/sr:match:{match_id}/summary.json?api_key={cfg.rugby_api_key}"
 
     req = requests.get(url)
     try:

@@ -51,7 +51,7 @@ def install(c):
 def config_service(c):
     """Configure le service Blueberry."""
     c.run(
-            'sed -e "s/{{{{dir}}}}/{}/g" ressources/bookmaker.service >> /etc/systemd/system/bookmaker.service'.format(
+            'sed -e "s/{{{{dir}}}}/{}/g" install/bookmaker.service >> /etc/systemd/system/bookmaker.service'.format(
                     cfg.work_dir.replace("/", "\/")
                     )
             )

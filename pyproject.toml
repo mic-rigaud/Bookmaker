@@ -5,7 +5,7 @@ description = "Bot telegram permettant de faire des paris rugbystiques entre ami
 authors = ["michael <michael@mic-rigaud.fr>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.7.3"
 python-telegram-bot = "^13.14"
 invoke = "^1.7.3"
 peewee = "^3.15.3"
