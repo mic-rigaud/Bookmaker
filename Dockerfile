@@ -18,7 +18,7 @@ WORKDIR /app
 VOLUME /app/log
 VOLUME /app/ressources
 
-RUN cp /app/install/config-docker.py /app/config.py && poetry install && poetry run invoke install
+RUN cp ./install/config-docker.py ./config.py && poetry install && poetry run invoke install
 
 
 CMD poetry run invoke config-bdd && poetry run invoke start-local
