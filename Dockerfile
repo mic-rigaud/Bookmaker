@@ -1,5 +1,11 @@
 FROM debian
 
+ARG BOOKMAKER_BOT_TOKEN
+ARG BOOKMAKER_MDP
+ARG BOOKMAKER_ADMIN
+ARG RUGBY_API_KEY
+
+
 RUN apt-get update -yq  \
     && apt-get install -y python3-pip python3 net-tools graphviz traceroute  \
     && apt-get clean -y  \
@@ -12,7 +18,7 @@ WORKDIR /app
 VOLUME /app/log
 VOLUME /app/ressources
 
-RUN poetry install && poetry run invoke install
+RUN cp /app/install/config-docker.py /app/config.py && poetry install && poetry run invoke install
 
 
 CMD poetry run invoke config-bdd && poetry run invoke start-local

@@ -9,10 +9,11 @@ from telegram.ext import (
     ConversationHandler,
     Filters,
     MessageHandler,
-)
+    )
 
 import config as cfg
 from src.api.Joueur_BDD import Joueur
+
 
 ETAPE1, ETAPE2 = range(2)
 
@@ -20,9 +21,9 @@ ETAPE1, ETAPE2 = range(2)
 def bonjour(update: Update, context: CallbackContext):
     """Gere les bonjour."""
     record = Joueur.select().where(
-        Joueur.user_id == update.message.from_user.id
-        and Joueur.chat_id == update.message.chat_id
-    )
+            (Joueur.user_id == update.message.from_user.id)
+            & (Joueur.chat_id == update.message.chat_id)
+            )
     if not record.exists():
         reponse = (
             "Bonjour!\nJe suis un Bookmaker spécialisé dans le rugby! Je vais te permettre de faire quelques "
@@ -30,14 +31,14 @@ def bonjour(update: Update, context: CallbackContext):
             "de passe ? "
         )
         context.bot.send_message(
-            chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-        )
+                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
+                )
         return ETAPE1
     else:
         reponse = "Mais on se connait déjà tous les deux.😉\nFais /help si tu veux connaitre mes capacités."
         context.bot.send_message(
-            chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-        )
+                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
+                )
         return ConversationHandler.END
 
 
@@ -46,14 +47,14 @@ def etape1(update: Update, context: CallbackContext):
     if mdp.lower() == cfg.mdp:
         reponse = "Super! Tu fais bien parti du groupe! Comment tu t'appelles?"
         context.bot.send_message(
-            chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-        )
+                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
+                )
         return ETAPE2
     else:
         reponse = "Désolé! Ce n'est pas le bon mot de passe. Au revoir."
         context.bot.send_message(
-            chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-        )
+                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
+                )
         return ConversationHandler.END
 
 
@@ -62,14 +63,13 @@ def etape2(update: Update, context: CallbackContext):
     chat_id = update.message.chat_id
     user_id = update.message.from_user.id
     Joueur.create(nom=nom, chat_id=chat_id, user_id=user_id).save()
-    logging.info("Ajout de l'utilisateur {}".format(nom))
-    reponse = (
-        "Bienvenue à toi {}.\nMaintenant à toi de jouer! Les paris sont ouverts!\n Au fait, si tu as besoin "
-        "d'en savoir plus sur mes fonctionnalités fais /help".format(nom)
-    )
+    logging.info(f"Ajout de l'utilisateur {nom}")
+    reponse = f"Bienvenue à toi {nom}.\nMaintenant à toi de jouer! Les paris sont ouverts!\n Au fait, si tu as besoin " \
+              f"d'en savoir plus sur mes fonctionnalités fais /help "
+
     context.bot.send_message(
-        chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-    )
+            chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
+            )
     return ConversationHandler.END
 
 
@@ -83,11 +83,11 @@ def add(dispatcher):
     Ajoute les utilisateurs
     """
     new_alarm_handler = ConversationHandler(
-        entry_points=[CommandHandler("bonjour", bonjour)],
-        states={
-            ETAPE1: [MessageHandler(Filters.text, etape1)],
-            ETAPE2: [MessageHandler(Filters.text, etape2)],
-        },
-        fallbacks=[CommandHandler("end", conv_cancel)],
-    )
+            entry_points=[CommandHandler("bonjour", bonjour)],
+            states={
+                ETAPE1: [MessageHandler(Filters.text, etape1)],
+                ETAPE2: [MessageHandler(Filters.text, etape2)],
+                },
+            fallbacks=[CommandHandler("end", conv_cancel)],
+            )
     dispatcher.add_handler(new_alarm_handler)

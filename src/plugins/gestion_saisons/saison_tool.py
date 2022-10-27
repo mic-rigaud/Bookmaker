@@ -14,7 +14,7 @@ def get_seasons():
     """get_seasons:"""
     url = (
             "https://api.sportradar.us/rugby-union/trial/v3/fr/seasons.json?api_key="
-            + cfg.rygby_api_key
+            + cfg.rugby_api_key
     )
     req = requests.get(url)
     return json.loads(req.content.decode("utf-8"))["seasons"]

@@ -23,7 +23,15 @@ Attention, pour utiliser ce bot il faut au préalable :
 Préparer l'installation:
 
 ```bash
-cp ./test/install/config.test ./config.py
+cp ./install/config.test ./config.py
+```
+
+OU
+
+mais dans ce cas il faut préciser les variables d'environnements lors du lancement du docker
+
+```bash
+cp ./install/config-docker.py ./config.py
 ```
 
 Ensuite il faut modifier le fichier config.py
@@ -48,7 +56,7 @@ Pour preparer l'installation
 apt-get update -qq && apt-get install -y python3-pip python3 net-tools graphviz traceroute
 pip3 install poetry
 poetry install
-cp ./test/install/config.test ./config.py
+cp ./install/config.test ./config.py
 poetry run invoke install
 ```
 
