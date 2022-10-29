@@ -9,7 +9,7 @@ bot_token = os.environ['BOOKMAKER_BOT_TOKEN']
 # Administrateurs
 # Liste des personnes autorisées a administrer le bot.
 # il est attendu les chat_id des administrateurs
-admin_chatid = [os.environ['BOOKMAKER_ADMIN']]
+admin_chatid = [int(os.environ['BOOKMAKER_ADMIN'])]
 
 # Mot de passe pour pouvoir acceder à ce bot
 mdp = os.environ['BOOKMAKER_MDP']
