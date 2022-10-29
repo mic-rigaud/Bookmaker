@@ -7,34 +7,40 @@
 
 """Permet d'avoir le classement des joueurs"""
 
-from telegram import Update, ParseMode
-from telegram.ext import CommandHandler, CallbackContext
+from telegram import Update
+from telegram.ext import CallbackContext, CommandHandler
 
 from src.api.Joueur_BDD import Joueur
 from src.api.Restricted import restricted
+from src.api.button import bot_send_message
 
 
-def get_classement_user(chat_id):
-    record = (
-        Joueur.select()
-        .where(Joueur.chat_id == chat_id)
-        .order_by(Joueur.total_point.desc())
-    )
+def get_classement_users_in_chat(chat_id):
+    record = Joueur.select().where(Joueur.chat_id == chat_id).order_by(Joueur.total_point.desc())
+
     reponse = "Voici la liste des joueurs:\n"
     for i, person in enumerate(record, start=1):
-        reponse += "{}: {} ({} pts)\n".format(
-            str(i), person.nom, str(person.total_point)
-        )
+        reponse += f"{str(i)}: {person.nom} ({str(person.total_point)} pts)\n"
+    return reponse
+
+
+def get_classement_users_alone():
+    record = Joueur.select().where(Joueur.chat_id == Joueur.user_id).order_by(Joueur.total_point.desc())
+
+    reponse = "Voici la liste des joueurs:\n"
+    for i, person in enumerate(record, start=1):
+        reponse += f"{str(i)}: {person.nom} ({str(person.total_point)} pts)\n"
     return reponse
 
 
 @restricted
 def classement(update: Update, context: CallbackContext):
     """Renvoi le classement des joueurs."""
-    reponse = get_classement_user(update.message.chat_id)
-    context.bot.send_message(
-        chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-    )
+    if update.message.chat_id == update.message.from_user.id:
+        reponse = get_classement_users_alone()
+    else:
+        reponse = get_classement_users_in_chat(update.message.chat_id)
+    bot_send_message(update, context, text=reponse)
 
 
 def add(dispatcher):

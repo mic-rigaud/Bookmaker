@@ -86,8 +86,6 @@ def charge_plugins(main_dispatcher):
 
 if __name__ == "__main__":
     logging.info("Demarrage de Bookmaker")
-    print(cfg.bot_token)
-    print(type(cfg.bot_token))
     updater = Updater(token=cfg.bot_token, use_context=True)
     dispatcher = updater.dispatcher
     charge_plugins(dispatcher)
