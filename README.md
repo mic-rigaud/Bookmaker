@@ -1,4 +1,4 @@
-![Gitlab](https://github.com/mic-rigaud/Bookmaker/actions/workflows/python-app.yml/badge.svg)
+[![Python application](https://github.com/mic-rigaud/Bookmaker/actions/workflows/python-app.yml/badge.svg)](https://github.com/mic-rigaud/Bookmaker/actions/workflows/python-app.yml) [![CodeQL](https://github.com/mic-rigaud/Bookmaker/actions/workflows/codeql.yml/badge.svg)](https://github.com/mic-rigaud/Bookmaker/actions/workflows/codeql.yml/badge.svg)
 
 # Bookmaker
 

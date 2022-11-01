@@ -23,7 +23,7 @@ class Match(BaseModel):
     saison = ForeignKeyField(Saisons, backref="match")
 
     def __str__(self):
-        return f"{self.equipe1} - {self.equipe2}"
+        return f"{self.get_date_match():%d/%m} : {self.equipe1} - {self.equipe2}"
 
     def get_date_match(self):
         # noinspection PyTypeChecker
