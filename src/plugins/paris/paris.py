@@ -13,6 +13,7 @@ from src.api.Joueur_BDD import get_joueur
 from src.api.Restricted import restricted
 from src.api.button import build_menu
 import src.plugins.paris.paris_conv_add as conv_add
+import src.plugins.paris.paris_conv_modif as conv_modif
 from src.plugins.paris.paris_tool import liste_paris
 
 
@@ -43,6 +44,7 @@ def creer_bouton():
         InlineKeyboardButton("Ajouter un paris", callback_data="paris_add"),
         InlineKeyboardButton("Lister vos futurs paris", callback_data="paris_liste_f"),
         InlineKeyboardButton("Lister vos précédents paris", callback_data="paris_liste_p"),
+        InlineKeyboardButton("Modifier un paris", callback_data="paris_modif"),
         ]
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
 
@@ -83,5 +85,26 @@ def add(dispatcher):
                     ],
                 },
             fallbacks=[CommandHandler("end", conv_add.conv_cancel)],
+            conversation_timeout=30
             )
     dispatcher.add_handler(new_alarm_handler)
+    new_alarm_handler2 = ConversationHandler(
+            entry_points=[CallbackQueryHandler(conv_modif.button_modif, pattern="^paris_modif$")],
+            states={
+                conv_modif.ETAPE1: [
+                    CallbackQueryHandler(conv_modif.etape1, pattern="^paris_modif1_.")
+                    ],
+                conv_modif.ETAPE2: [
+                    CallbackQueryHandler(conv_modif.etape2, pattern="^paris_modif2_.")
+                    ],
+                conv_modif.ETAPE3: [
+                    CallbackQueryHandler(conv_modif.etape3, pattern="^paris_modif3_.")
+                    ],
+                conv_modif.ETAPE4: [
+                    CallbackQueryHandler(conv_modif.etape4, pattern="^paris_modif4_.")
+                    ],
+                },
+            fallbacks=[CommandHandler("end", conv_modif.conv_cancel)],
+            conversation_timeout=30
+            )
+    dispatcher.add_handler(new_alarm_handler2)

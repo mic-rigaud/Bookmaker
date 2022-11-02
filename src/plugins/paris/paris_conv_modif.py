@@ -1,34 +1,28 @@
-from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update)
+from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, Update)
 from telegram.ext import CallbackContext, ConversationHandler
 
-from src.api.Gestion_Match import creer_button_liste_next_match_pariable
+from src.api.Gestion_Match import creer_button_liste_next_match_with_paris
 from src.api.Joueur_BDD import get_joueur
 from src.api.Match_BDD import Match
-from src.api.Paris_BDD import Paris
+from src.api.Paris_BDD import get_paris
 from src.api.button import bot_edit_message, bot_send_message, build_menu
 
 
 ETAPE1, ETAPE2, ETAPE3, ETAPE4 = range(4)
 
 
-def button_add(update: Update, context: CallbackContext):
+def button_modif(update: Update, context: CallbackContext):
     # Traitement réponse
     query = update.callback_query
     joueur = get_joueur(query.message.chat_id, query.from_user.id)
     if joueur is None:
-        context.bot.edit_message_text(
-                chat_id=query.message.chat_id,
-                message_id=query.message.message_id,
-                text="Le joueur n'existe pas",
-                parse_mode=ParseMode.HTML,
-                )
+        bot_edit_message(update=update, context=context, text="Le joueur n'existe pas")
         return ConversationHandler.END
-    paris = Paris(joueur=joueur)
-    context.user_data[0] = paris
+    context.user_data[0] = joueur
     # Traitement question
-    reponse = "Sur quel match souhaitez vous faire un paris?"
+    reponse = "Quel paris souhaitez-vous modifier ?"
     reply_markup = InlineKeyboardMarkup(
-            build_menu(creer_button_liste_next_match_pariable("paris_add1", joueur), n_cols=1)
+            build_menu(creer_button_liste_next_match_with_paris("paris_modif1", joueur), n_cols=1)
             )
     bot_edit_message(update=update, context=context, text=reponse, reply_markup=reply_markup)
     return ETAPE1
@@ -36,19 +30,20 @@ def button_add(update: Update, context: CallbackContext):
 
 def etape1(update: Update, context: CallbackContext):
     # Traitement réponse
-    paris = context.user_data[0]
+    joueur = context.user_data[0]
     query = update.callback_query
     match_id = query.data.split("_")[2]
-    paris.match = Match.get_by_id(match_id)
-    paris.date_match = paris.match.get_date_match()
+    match = Match.get_by_id(match_id)
+    paris = get_paris(joueur, match)
+    context.user_data[0] = paris
     # Traitement question
     bot_edit_message(update=update, context=context,
-                     text=f"Vous avez choisi de faire un paris sur ce match:\n {paris.match}")
+                     text=f"Vous avez choisi de modifier le paris de ce match:\n {match}")
 
     reponse = "Quel équipe sera vainqueur ?"
     button_list = [
-        InlineKeyboardButton(paris.match.equipe1, callback_data="paris_add2_1"),
-        InlineKeyboardButton(paris.match.equipe2, callback_data="paris_add2_2"),
+        InlineKeyboardButton(paris.match.equipe1, callback_data="paris_modif2_1"),
+        InlineKeyboardButton(paris.match.equipe2, callback_data="paris_modif2_2"),
         ]
     reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
     bot_send_message(update=update, context=context, text=reponse, reply_markup=reply_markup)
@@ -65,8 +60,8 @@ def etape2(update: Update, context: CallbackContext):
     # Traitement question
     reponse = "Avec un point de bonus offensif ?"
     button_list = [
-        InlineKeyboardButton("oui", callback_data="paris_add3_1"),
-        InlineKeyboardButton("non", callback_data="paris_add3_2"),
+        InlineKeyboardButton("oui", callback_data="paris_modif3_1"),
+        InlineKeyboardButton("non", callback_data="paris_modif3_2"),
         ]
     reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
     bot_edit_message(update=update, context=context, text=reponse, reply_markup=reply_markup)
@@ -83,8 +78,8 @@ def etape3(update: Update, context: CallbackContext):
     # Traitement question
     reponse = "Avec un point de bonus défensif ?"
     button_list = [
-        InlineKeyboardButton("oui", callback_data="paris_add4_1"),
-        InlineKeyboardButton("non", callback_data="paris_add4_2"),
+        InlineKeyboardButton("oui", callback_data="paris_modif4_1"),
+        InlineKeyboardButton("non", callback_data="paris_modif4_2"),
         ]
     reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
     bot_edit_message(update=update, context=context, text=reponse, reply_markup=reply_markup)
