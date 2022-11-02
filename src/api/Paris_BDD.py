@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 
 from peewee import BooleanField, DateTimeField, ForeignKeyField, IntegerField
 
@@ -40,3 +41,21 @@ class Paris(BaseModel):
     def get_date_paris(self):
         # noinspection PyTypeChecker
         return datetime.strptime(self.date_match, "%Y-%m-%d %H:%M:%S%z")
+
+
+def get_paris(joueur, match):
+    """get_paris: retourne le paris avec un joueur et un match_id
+
+    :param Joueur joueur: joueur de la recherche
+    :param Match match: match de la recherche
+    :rtype: Paris
+    """
+
+    try:
+        return (
+            Paris.select().where((Paris.joueur == joueur) & (Paris.match == match)).get()
+        )
+    except Paris.DoesNotExist:
+        logging.warning(
+                f"Le joueur demandé n'existe pas. Le joueur est {joueur.nom} et le match_id est {match.match_id}")
+        return None

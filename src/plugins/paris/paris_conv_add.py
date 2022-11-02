@@ -5,7 +5,7 @@ from src.api.Gestion_Match import creer_button_liste_next_match_pariable
 from src.api.Joueur_BDD import get_joueur
 from src.api.Match_BDD import Match
 from src.api.Paris_BDD import Paris
-from src.api.button import build_menu
+from src.api.button import bot_edit_message, bot_send_message, build_menu
 
 
 ETAPE1, ETAPE2, ETAPE3, ETAPE4 = range(4)
@@ -30,13 +30,7 @@ def button_add(update: Update, context: CallbackContext):
     reply_markup = InlineKeyboardMarkup(
             build_menu(creer_button_liste_next_match_pariable("paris_add1", joueur), n_cols=1)
             )
-    context.bot.edit_message_text(
-            message_id=query.message.message_id,
-            chat_id=query.message.chat_id,
-            text=reponse,
-            parse_mode=ParseMode.HTML,
-            reply_markup=reply_markup,
-            )
+    bot_edit_message(update=update, context=context, text=reponse, reply_markup=reply_markup)
     return ETAPE1
 
 
@@ -48,19 +42,16 @@ def etape1(update: Update, context: CallbackContext):
     paris.match = Match.get_by_id(match_id)
     paris.date_match = paris.match.get_date_match()
     # Traitement question
+    bot_edit_message(update=update, context=context,
+                     text=f"Vous avez choisi de faire un paris sur ce match:\n {paris.match}")
+
     reponse = "Quel équipe sera vainqueur ?"
     button_list = [
         InlineKeyboardButton(paris.match.equipe1, callback_data="paris_add2_1"),
         InlineKeyboardButton(paris.match.equipe2, callback_data="paris_add2_2"),
         ]
     reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
-    context.bot.edit_message_text(
-            message_id=query.message.message_id,
-            chat_id=query.message.chat_id,
-            text=reponse,
-            parse_mode=ParseMode.HTML,
-            reply_markup=reply_markup,
-            )
+    bot_send_message(update=update, context=context, text=reponse, reply_markup=reply_markup)
     return ETAPE2
 
 
@@ -78,13 +69,7 @@ def etape2(update: Update, context: CallbackContext):
         InlineKeyboardButton("non", callback_data="paris_add3_2"),
         ]
     reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
-    context.bot.edit_message_text(
-            message_id=query.message.message_id,
-            chat_id=query.message.chat_id,
-            text=reponse,
-            parse_mode=ParseMode.HTML,
-            reply_markup=reply_markup,
-            )
+    bot_edit_message(update=update, context=context, text=reponse, reply_markup=reply_markup)
     return ETAPE3
 
 
@@ -102,13 +87,7 @@ def etape3(update: Update, context: CallbackContext):
         InlineKeyboardButton("non", callback_data="paris_add4_2"),
         ]
     reply_markup = InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
-    context.bot.edit_message_text(
-            message_id=query.message.message_id,
-            chat_id=query.message.chat_id,
-            text=reponse,
-            parse_mode=ParseMode.HTML,
-            reply_markup=reply_markup,
-            )
+    bot_edit_message(update=update, context=context, text=reponse, reply_markup=reply_markup)
     return ETAPE4
 
 
@@ -121,21 +100,10 @@ def etape4(update: Update, context: CallbackContext):
     paris.save()
     # Traitement question
     reponse = "Votre paris a bien été enregistré"
-    context.bot.edit_message_text(
-            message_id=query.message.message_id,
-            chat_id=query.message.chat_id,
-            text=reponse,
-            parse_mode=ParseMode.HTML,
-            reply_markup=None,
-            )
+    bot_edit_message(update=update, context=context, text=reponse, reply_markup=None)
     return ConversationHandler.END
 
 
 def conv_cancel(update: Update, context: CallbackContext):
-    reponse = "Au revoir"
-    context.bot.send_message(
-            chat_id=update.message.chat_id,
-            text=reponse,
-            parse_mode=ParseMode.HTML,
-            )
+    bot_send_message(update=update, context=context, text="Au revoir")
     return ConversationHandler.END
