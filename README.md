@@ -1,8 +1,10 @@
-[![Python application](https://github.com/mic-rigaud/Bookmaker/actions/workflows/python-app.yml/badge.svg)](https://github.com/mic-rigaud/Bookmaker/actions/workflows/python-app.yml) [![CodeQL](https://github.com/mic-rigaud/Bookmaker/actions/workflows/codeql.yml/badge.svg)](https://github.com/mic-rigaud/Bookmaker/actions/workflows/codeql.yml/badge.svg)
+![version](https://img.shields.io/badge/version-0.1.0-success) [![Python application](https://github.com/mic-rigaud/Bookmaker/actions/workflows/python-app.yml/badge.svg)](https://github.com/mic-rigaud/Bookmaker/actions/workflows/python-app.yml) [![CodeQL](https://github.com/mic-rigaud/Bookmaker/actions/workflows/codeql.yml/badge.svg)](https://github.com/mic-rigaud/Bookmaker/actions/workflows/codeql.yml/badge.svg)
 
 # Bookmaker
 
-Version: 0.1.0
+This bot speak in french. It is a bot for french people. So the rest of this README is in french.
+
+## Description
 
 Bot telegram pour des paris rugbystiques entre amis à héberger chez soi
 
@@ -67,3 +69,7 @@ Enfin, pour lancer l'application
 ```bash
 poetry run invoke start-local
 ```
+
+## Report un problème de sécurité
+
+Veuillez consulter le [Security.md](./Security.md)
