@@ -10,12 +10,9 @@ from src.plugins.gestion_match.match_tool import add_match, delete_matchs, liste
 
 @restricted_admin
 def button_add(update: Update, context: CallbackContext):
-    query = update.callback_query
     reply_markup = creer_bouton()
+    bot_edit_message(update, context, "Ajout des matchs en cours", reply_markup)
     reponse = add_match()
-    # Evite l'erreur du message égal au précédent
-    if reponse == query.message.text:
-        reponse += "."
     bot_edit_message(update, context, reponse, reply_markup)
 
 
@@ -28,23 +25,16 @@ def button_rm(update: Update, context: CallbackContext):
 
 @restricted_admin
 def button_liste(update: Update, context: CallbackContext):
-    query = update.callback_query
     reply_markup = creer_bouton()
     reponse = liste_match()
-    # Evite l'erreur du message égal au précédent
-    if reponse == query.message.text:
-        reponse += "."
     bot_edit_message(update, context, reponse, reply_markup)
 
 
 @restricted_admin
 def button_refresh(update: Update, context: CallbackContext):
-    query = update.callback_query
     reply_markup = creer_bouton()
+    bot_edit_message(update, context, "Actualisation des matchs en cours", reply_markup)
     reponse = refresh_match()
-    # Evite l'erreur du message égal au précédent
-    if reponse == query.message.text:
-        reponse += "."
     bot_edit_message(update, context, reponse, reply_markup)
 
 

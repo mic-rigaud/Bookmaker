@@ -5,10 +5,10 @@ services:
     build:
       context: .
       args:
-        - BOOKMAKER_BOT_TOKEN="${BOOKMAKER_BOT_TOKEN}"
+        - BOOKMAKER_BOT_TOKEN=${BOOKMAKER_BOT_TOKEN}
         - BOOKMAKER_ADMIN=${BOOKMAKER_ADMIN}
-        - BOOKMAKER_MDP="${BOOKMAKER_MDP}"
-        - RUGBY_API_KEY="${RUGBY_API_KEY}"
+        - BOOKMAKER_MDP=${BOOKMAKER_MDP}
+        - RUGBY_API_KEY=${RUGBY_API_KEY}
     container_name: bookmaker
     volumes:
       - bookmaker-data:/app/ressources

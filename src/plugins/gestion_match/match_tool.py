@@ -112,7 +112,7 @@ def refresh_match():
     """
     for match in Match.select():
         if match.vainqueur == 0 and match.get_date_match() <= datetime.now().replace(tzinfo=pytz.UTC) and \
-                (not cfg.test or match.get_date_match() <= datetime.now().replace(tzinfo=pytz.UTC) - timedelta(days=7)):
+                (not cfg.test or match.get_date_match() >= datetime.now().replace(tzinfo=pytz.UTC) - timedelta(days=7)):
             time.sleep(5)
             actualiser_match(match)
     return "Resultats bien mis à jour"
