@@ -1,7 +1,6 @@
 import json
 import logging
 
-import telegram
 from telegram import MAX_MESSAGE_LENGTH, ParseMode, Update
 from telegram.error import BadRequest
 from telegram.ext import CallbackContext
@@ -27,18 +26,13 @@ def button(update: Update, context: CallbackContext):
     except json.JSONDecodeError:
         data = query.data
 
+    # noinspection PyTypeChecker
     module_name = data["module"]
     mod = __import__(f"actions.{module_name}", fromlist=[""])
     reponse, reply_markup = mod.button(update, context)
 
     try:
-        context.bot.edit_message_text(
-                text=reponse,
-                chat_id=query.message.chat_id,
-                message_id=query.message.message_id,
-                parse_mode=telegram.ParseMode.HTML,
-                reply_markup=reply_markup,
-                )
+        bot_edit_message(update, context, text=reponse, reply_markup=reply_markup)
     except BadRequest as ex:
         logging.error("Error: meme message et meme reply_markup\n" + str(ex))
 

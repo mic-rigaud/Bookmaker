@@ -2,7 +2,7 @@
 
 import logging
 
-from telegram import ParseMode, Update
+from telegram import Update
 from telegram.ext import (
     CallbackContext,
     CommandHandler,
@@ -13,6 +13,7 @@ from telegram.ext import (
 
 import config as cfg
 from src.api.Joueur_BDD import Joueur
+from src.api.button import bot_send_message
 
 
 ETAPE1, ETAPE2 = range(2)
@@ -30,15 +31,11 @@ def bonjour(update: Update, context: CallbackContext):
             "petits paris entre copains. Avant de commencer à prendre tes paris, pourrais tu me donner le mot "
             "de passe ? "
         )
-        context.bot.send_message(
-                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-                )
+        bot_send_message(context=context, update=update, text=reponse)
         return ETAPE1
     else:
         reponse = "Mais on se connait déjà tous les deux.😉\nFais /help si tu veux connaitre mes capacités."
-        context.bot.send_message(
-                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-                )
+        bot_send_message(context=context, update=update, text=reponse)
         return ConversationHandler.END
 
 
@@ -46,15 +43,11 @@ def etape1(update: Update, context: CallbackContext):
     mdp = update.message.text
     if mdp.lower() == cfg.mdp:
         reponse = "Super! Tu fais bien parti du groupe! Comment tu t'appelles?"
-        context.bot.send_message(
-                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-                )
+        bot_send_message(context=context, update=update, text=reponse)
         return ETAPE2
     else:
         reponse = "Désolé! Ce n'est pas le bon mot de passe. Au revoir."
-        context.bot.send_message(
-                chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-                )
+        bot_send_message(context=context, update=update, text=reponse)
         return ConversationHandler.END
 
 
@@ -67,14 +60,12 @@ def etape2(update: Update, context: CallbackContext):
     reponse = f"Bienvenue à toi {nom}.\nMaintenant à toi de jouer! Les paris sont ouverts!\n Au fait, si tu as besoin " \
               f"d'en savoir plus sur mes fonctionnalités fais /help "
 
-    context.bot.send_message(
-            chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-            )
+    bot_send_message(context=context, update=update, text=reponse)
     return ConversationHandler.END
 
 
 def conv_cancel(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.message.chat_id, text="Bon c'est fini")
+    bot_send_message(context=context, update=update, text="Bon c'est fini")
     return ConversationHandler.END
 
 

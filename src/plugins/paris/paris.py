@@ -6,12 +6,12 @@
 # @Project: Bookmaker
 
 """Permet de gerer les paris."""
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (CallbackContext, CallbackQueryHandler, CommandHandler, ConversationHandler)
 
 from src.api.Joueur_BDD import get_joueur
 from src.api.Restricted import restricted
-from src.api.button import build_menu
+from src.api.button import bot_edit_message, bot_send_message, build_menu
 import src.plugins.paris.paris_conv_add as conv_add
 import src.plugins.paris.paris_conv_modif as conv_modif
 from src.plugins.paris.paris_tool import liste_paris
@@ -27,15 +27,7 @@ def button_liste(update: Update, context: CallbackContext):
         reponse = "Erreur, le joueur n'existe pas"
     else:
         reponse = liste_paris(joueur, futur)
-    if query.message.text[-1] != ".":
-        reponse += "."
-    context.bot.edit_message_text(
-            chat_id=query.message.chat_id,
-            message_id=query.message.message_id,
-            text=reponse,
-            parse_mode=ParseMode.HTML,
-            reply_markup=reply_markup,
-            )
+    bot_edit_message(context=context, update=update, text=reponse, reply_markup=reply_markup)
 
 
 def creer_bouton():
@@ -54,12 +46,7 @@ def paris(update: Update, context: CallbackContext):
     """Renvoi le compte à rebour."""
     reponse = "Que souhaitez-vous faire ?\n"
     reply_markup = creer_bouton()
-    context.bot.send_message(
-            chat_id=update.message.chat_id,
-            text=reponse,
-            parse_mode=ParseMode.HTML,
-            reply_markup=reply_markup,
-            )
+    bot_send_message(context=context, update=update, text=reponse, reply_markup=reply_markup, )
 
 
 def add(dispatcher):

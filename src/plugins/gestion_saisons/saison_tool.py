@@ -50,7 +50,7 @@ def ajouter_saison(saison_id):
             saison_ajout.expiration = datetime.strptime(saison["end_date"], "%Y-%m-%d")
             saison_ajout.nom = saison["name"]
             saison_ajout.save()
-            logging.info(f'La saison {saison["name"]} a bien été ajouté')
+            logging.info(f'La saison {saison["name"]} avec le saisonid {saison_id} a bien été ajouté')
             return f'la saison {saison["name"]} a bien été ajouté'
     logging.warning("Erreur lors de l'ajout de la saison")
     return "Erreur lors de l'enregistrement de la saison"

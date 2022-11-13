@@ -1,10 +1,10 @@
 """Permet de gerer les matchs pour un admin"""
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from src.api.Restricted import restricted_admin
-from src.api.button import bot_edit_message, build_menu
+from src.api.button import bot_edit_message, bot_send_message, build_menu
 from src.plugins.gestion_match.match_tool import add_match, delete_matchs, liste_match, refresh_match
 
 
@@ -52,14 +52,8 @@ def creer_bouton():
 @restricted_admin
 def gestion_match(update: Update, context: CallbackContext):
     """Permet de gerer les matchs."""
-    reponse = "Voici les actions sur la gestion des matchs:\n"
-    reply_markup = creer_bouton()
-    context.bot.send_message(
-            chat_id=update.message.chat_id,
-            text=reponse,
-            parse_mode=ParseMode.HTML,
-            reply_markup=reply_markup,
-            )
+    bot_send_message(context=context, update=update, text="Voici les actions sur la gestion des matchs:\n",
+                     reply_markup=creer_bouton())
 
 
 def add(dispatcher):

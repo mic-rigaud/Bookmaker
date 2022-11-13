@@ -72,4 +72,4 @@ poetry run invoke start-local
 
 ## Report un problème de sécurité
 
-Veuillez consulter le [Security.md](./Security.md)
+Veuillez consulter le [Security.md](https://github.com/mic-rigaud/Bookmaker/blob/main/SECURITY.md)

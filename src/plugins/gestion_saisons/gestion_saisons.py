@@ -2,17 +2,13 @@
 
 import logging
 
-from telegram import ParseMode, Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import CallbackContext, CommandHandler, CallbackQueryHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from src.api.Restricted import restricted_admin
 from src.api.Saisons_BDD import Saisons
-from src.api.button import build_menu
-from src.plugins.gestion_saisons.saison_tool import (
-    lister_saison,
-    ajouter_saison,
-    supprimer_saison,
-)
+from src.api.button import bot_edit_message, bot_send_message, build_menu
+from src.plugins.gestion_saisons.saison_tool import (ajouter_saison, lister_saison, supprimer_saison)
 
 
 def get_liste_saison():
@@ -33,13 +29,7 @@ def button_add(update: Update, context: CallbackContext):
     # Evite l'erreur du message égal au précédent
     if reponse == query.message.text:
         reponse += "."
-    context.bot.edit_message_text(
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        text=reponse,
-        parse_mode=ParseMode.HTML,
-        reply_markup=reply_markup,
-    )
+    bot_edit_message(context=context, update=update, text=reponse, reply_markup=reply_markup)
 
 
 @restricted_admin
@@ -51,13 +41,7 @@ def button_supp(update: Update, context: CallbackContext):
         saison_id = query.data.split("_")[2]
         reponse = supprimer_saison(saison_id)
     reply_markup = creer_bouton_liste(get_liste_saison(), "supp")
-    context.bot.edit_message_text(
-        chat_id=query.message.chat_id,
-        message_id=query.message.message_id,
-        text=reponse,
-        parse_mode=ParseMode.HTML,
-        reply_markup=reply_markup,
-    )
+    bot_edit_message(context=context, update=update, text=reponse, reply_markup=reply_markup)
 
 
 def creer_bouton_liste(liste_saisons, fonction):
@@ -65,15 +49,14 @@ def creer_bouton_liste(liste_saisons, fonction):
         button_list = []
         for saison_id in liste_saisons:
             line = str(liste_saisons[saison_id])
-            button_list.append(
-                InlineKeyboardButton(
-                    line, callback_data="gs_{}_{}".format(fonction, str(saison_id))
-                )
-            )
+            button_list.append(InlineKeyboardButton(line, callback_data=f"gs_{fonction}_{str(saison_id)}"))
+
         # button_list.append(InlineKeyboardButton("Retour", callback_data="gsaison_home"))
         return InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
-    except Exception:
-        logging.warning("<i>Aucune saisons dans la liste</i>")
+    except Exception as e:
+        logging.warning("Aucune saisons dans la liste")
+        logging.warning(e)
+        return None
 
 
 def creer_bouton():
@@ -81,7 +64,7 @@ def creer_bouton():
     button_list = [
         InlineKeyboardButton("Ajouter saison", callback_data="gsaison_add"),
         InlineKeyboardButton("Supprimer saison", callback_data="gsaison_supp"),
-    ]
+        ]
     return InlineKeyboardMarkup(build_menu(button_list, n_cols=1))
 
 
@@ -91,14 +74,8 @@ def gestion_saison(update: Update, context: CallbackContext):
     reponse = "Voici la liste des saisons suivies par le bot:\n"
     liste_saison = get_liste_saison()
     for key in liste_saison:
-        reponse += "{}\n".format(liste_saison[key])
-    reply_markup = creer_bouton()
-    context.bot.send_message(
-        chat_id=update.message.chat_id,
-        text=reponse,
-        parse_mode=ParseMode.HTML,
-        reply_markup=reply_markup,
-    )
+        reponse += f"{liste_saison[key]}\n"
+    bot_send_message(context=context, update=update, text=reponse, reply_markup=creer_bouton())
 
 
 def add(dispatcher):

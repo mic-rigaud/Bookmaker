@@ -1,27 +1,25 @@
 """Renvoi la liste des utilisateurs actuels."""
 
-from telegram import ParseMode, Update
+from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler
 
 from src.api.Joueur_BDD import Joueur
 from src.api.Restricted import restricted_admin
+from src.api.button import bot_send_message
 
 
 def get_liste_user():
     record = Joueur.select().where(True)
     reponse = "Voici la liste des utilisateurs:\n"
     for person in record:
-        reponse += "{}\n".format(person.nom)
+        reponse += f"{person.nom}\n"
     return reponse
 
 
 @restricted_admin
 def admin_user(update: Update, context: CallbackContext):
     """Renvoi la liste des joueurs."""
-    reponse = get_liste_user()
-    context.bot.send_message(
-        chat_id=update.message.chat_id, text=reponse, parse_mode=ParseMode.HTML
-    )
+    bot_send_message(context=context, update=update, text=get_liste_user())
 
 
 def add(dispatcher):

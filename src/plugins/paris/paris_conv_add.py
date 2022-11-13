@@ -1,4 +1,4 @@
-from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode, Update)
+from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, Update)
 from telegram.ext import CallbackContext, ConversationHandler
 
 from src.api.Gestion_Match import creer_button_liste_next_match_pariable
@@ -16,12 +16,7 @@ def button_add(update: Update, context: CallbackContext):
     query = update.callback_query
     joueur = get_joueur(query.message.chat_id, query.from_user.id)
     if joueur is None:
-        context.bot.edit_message_text(
-                chat_id=query.message.chat_id,
-                message_id=query.message.message_id,
-                text="Le joueur n'existe pas",
-                parse_mode=ParseMode.HTML,
-                )
+        bot_edit_message(context=context, update=update, text="Le joueur n'existe pas")
         return ConversationHandler.END
     paris = Paris(joueur=joueur)
     context.user_data[0] = paris
