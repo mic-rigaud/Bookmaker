@@ -32,7 +32,10 @@ class Paris(BaseModel):
             reponse += "\n  Avec bonus Defensif"
 
         if self.match.vainqueur != 0:
-            reponse += f"\n<b>TERMINE. V: {match_board[int(self.match.vainqueur)]}"
+            if self.match.vainqueur == 3:
+                reponse += f"\n<b>TERMINE. EGALITE"
+            else:
+                reponse += f"\n<b>TERMINE. V: {match_board[int(self.match.vainqueur)]}"
             reponse += f"{' -Bo' if self.match.bonus_offensif else ''}"
             reponse += f"{' -Bd' if self.match.bonus_defensif else ''}"
             reponse += f" (+{self.points_gagnes} pts)</b>\n"
