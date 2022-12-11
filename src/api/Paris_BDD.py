@@ -31,8 +31,8 @@ class Paris(BaseModel):
         if self.bonus_defensif:
             reponse += "\n  Avec bonus Defensif"
 
-        if self.match.vainqueur != 0:
-            if self.match.vainqueur == 3:
+        if int(self.match.vainqueur) != 0:
+            if int(self.match.vainqueur) == 3:
                 reponse += f"\n<b>TERMINE. EGALITE"
             else:
                 reponse += f"\n<b>TERMINE. V: {match_board[int(self.match.vainqueur)]}"
