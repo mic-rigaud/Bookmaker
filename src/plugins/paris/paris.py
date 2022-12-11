@@ -11,7 +11,8 @@ from telegram.ext import (CallbackContext, CallbackQueryHandler, CommandHandler,
 
 from src.api.Joueur_BDD import get_joueur
 from src.api.Restricted import restricted
-from src.api.button import bot_edit_message, bot_send_message, build_menu
+from src.api.button import build_menu
+from src.api.telegram_decorateur import bot_edit_message, bot_send_message
 import src.plugins.paris.paris_conv_add as conv_add
 import src.plugins.paris.paris_conv_modif as conv_modif
 from src.plugins.paris.paris_tool import liste_paris

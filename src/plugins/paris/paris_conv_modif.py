@@ -5,7 +5,8 @@ from src.api.Gestion_Match import creer_button_liste_next_match_with_paris
 from src.api.Joueur_BDD import get_joueur
 from src.api.Match_BDD import Match
 from src.api.Paris_BDD import get_paris
-from src.api.button import bot_edit_message, bot_send_message, build_menu
+from src.api.button import build_menu
+from src.api.telegram_decorateur import bot_edit_message, bot_send_message
 
 
 ETAPE1, ETAPE2, ETAPE3, ETAPE4 = range(4)

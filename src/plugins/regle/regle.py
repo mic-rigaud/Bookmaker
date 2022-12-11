@@ -12,7 +12,7 @@ from telegram.ext import CallbackContext, CommandHandler
 
 import config as cfg
 from src.api.Restricted import restricted
-from src.api.button import bot_send_message
+from src.api.telegram_decorateur import bot_send_message
 
 
 def get_regle():

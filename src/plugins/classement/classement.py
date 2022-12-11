@@ -12,7 +12,7 @@ from telegram.ext import CallbackContext, CommandHandler
 
 from src.api.Joueur_BDD import Joueur
 from src.api.Restricted import restricted
-from src.api.button import bot_send_message
+from src.api.telegram_decorateur import bot_send_message
 
 
 def get_classement_users_in_chat(chat_id):

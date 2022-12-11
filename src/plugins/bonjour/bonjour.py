@@ -13,7 +13,7 @@ from telegram.ext import (
 
 import config as cfg
 from src.api.Joueur_BDD import Joueur
-from src.api.button import bot_send_message
+from src.api.telegram_decorateur import bot_send_message
 
 
 ETAPE1, ETAPE2 = range(2)

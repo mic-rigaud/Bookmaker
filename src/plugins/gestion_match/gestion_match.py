@@ -4,7 +4,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from src.api.Restricted import restricted_admin
-from src.api.button import bot_edit_message, bot_send_message, build_menu
+from src.api.button import build_menu
+from src.api.telegram_decorateur import bot_edit_message, bot_send_message
 from src.plugins.gestion_match.match_tool import add_match, delete_matchs, liste_match, refresh_match
 
 

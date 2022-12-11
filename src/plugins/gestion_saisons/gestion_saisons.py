@@ -7,7 +7,8 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, CommandHandler
 
 from src.api.Restricted import restricted_admin
 from src.api.Saisons_BDD import Saisons
-from src.api.button import bot_edit_message, bot_send_message, build_menu
+from src.api.button import build_menu
+from src.api.telegram_decorateur import bot_edit_message, bot_send_message
 from src.plugins.gestion_saisons.saison_tool import (ajouter_saison, lister_saison, supprimer_saison)
 
 
